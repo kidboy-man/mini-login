@@ -1,0 +1,92 @@
+swagger: "2.0"
+info:
+  title: beego Test API
+  description: |
+    beego has a very cool tools to autogenerate documents for your API
+  version: 1.0.0
+  termsOfService: http://beego.me/
+  contact:
+    email: astaxie@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+basePath: /user/v1
+paths:
+  /public/users/login:
+    post:
+      tags:
+      - public/users
+      summary: login
+      description: |-
+        login
+        <br>
+      operationId: UserPublicController.Login
+      parameters:
+      - in: body
+        name: params
+        description: body of this request
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+  /public/users/register:
+    post:
+      tags:
+      - public/users
+      summary: register
+      description: |-
+        register
+        <br>
+      operationId: UserPublicController.Register
+      parameters:
+      - in: body
+        name: params
+        description: body of this request
+        required: true
+        schema:
+          $ref: '#/definitions/datatransfers.RegisterRequest'
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+definitions:
+  datatransfers.RegisterRequest:
+    title: RegisterRequest
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+  models.User:
+    title: User
+    type: object
+    properties:
+      createdAt:
+        type: string
+        format: datetime
+      email:
+        type: string
+      id:
+        type: integer
+        format: int32
+      password:
+        type: string
+      token:
+        type: string
+      updatedAt:
+        type: string
+        format: datetime
+      username:
+        type: string
+tags:
+- name: public/users
+  description: |
+    Operations about object
