@@ -6,9 +6,15 @@ import (
 	"log"
 	"net/http"
 
+	beego "github.com/beego/beego/v2/server/web"
 	"github.com/beego/beego/v2/server/web/context"
 	"github.com/beego/beego/v2/server/web/pagination"
 )
+
+type BaseController struct {
+	beego.Controller
+	JSONResponse *JSONResponse
+}
 
 type JSONResponse struct {
 	Success     bool        `json:"success"`
@@ -46,27 +52,24 @@ func doReturnNotOK(response *JSONResponse, err error) {
 	return
 }
 
-func (j *JSONResponse) ReturnJSONResponse(obj interface{}, err error) (response *JSONResponse) {
+func (c *BaseController) ReturnJSONResponse(obj interface{}, err error) *JSONResponse {
+	c.JSONResponse = &JSONResponse{}
 	if err != nil {
-		doReturnNotOK(j, err)
-		return
+		doReturnNotOK(c.JSONResponse, err)
+	} else {
+		doReturnOK(c.JSONResponse, obj)
 	}
 
-	doReturnOK(j, obj)
-	return
+	c.Ctx.Output.SetStatus(c.JSONResponse.Status)
+	return c.JSONResponse
 }
 
 func (j *JSONResponse) SetPagination(ctx *context.Context, totalData int64, limit, page int) {
-	log.Println("totalData", totalData)
-	log.Println("limit", limit)
 	paginator := pagination.SetPaginator(ctx, limit, totalData)
-
 	j.CurrentPage = page
 	j.TotalPages = paginator.PageNums()
-	log.Println("response", j.TotalPages)
 	j.DataPerPage = limit
 	j.HasNextPage = paginator.HasNext()
 	j.HasPrevPage = paginator.HasPrev()
-	log.Println("response", j)
 	return
 }

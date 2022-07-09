@@ -4,13 +4,12 @@ import (
 	"auth-service/conf"
 	"auth-service/datatransfers"
 	usecase "auth-service/usecases"
-
-	beego "github.com/beego/beego/v2/server/web"
+	"log"
 )
 
 // Operations about object
 type AuthPublicController struct {
-	beego.Controller
+	BaseController
 	authUcase usecase.AuthUsecase
 }
 
@@ -25,10 +24,10 @@ func (c *AuthPublicController) Prepare() {
 // @Failure 403
 // @Param params body datatransfers.RegisterRequest true "body of this request"
 // @router /register [post]
-func (c *AuthPublicController) Register(params *datatransfers.AuthRequest) (response JSONResponse) {
+func (c *AuthPublicController) Register(params *datatransfers.AuthRequest) *JSONResponse {
 	err := c.authUcase.Register(params)
-	response.ReturnJSONResponse(nil, err)
-	return
+	log.Println("error registering", err)
+	return c.ReturnJSONResponse(nil, err)
 }
 
 // @Title Login
@@ -38,8 +37,7 @@ func (c *AuthPublicController) Register(params *datatransfers.AuthRequest) (resp
 // @Failure 403
 // @Param params body models.Auth true "body of this request"
 // @router /login [post]
-func (c *AuthPublicController) Login(params *datatransfers.AuthRequest) (response JSONResponse) {
+func (c *AuthPublicController) Login(params *datatransfers.AuthRequest) *JSONResponse {
 	auth, err := c.authUcase.Login(params)
-	response.ReturnJSONResponse(auth, err)
-	return
+	return c.ReturnJSONResponse(auth, err)
 }

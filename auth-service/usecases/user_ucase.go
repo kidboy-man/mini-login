@@ -7,8 +7,10 @@ import (
 	"auth-service/models"
 	repository "auth-service/repositories"
 	"auth-service/utils"
+	"fmt"
 	"net/http"
 
+	"github.com/prometheus/common/log"
 	"gorm.io/gorm"
 )
 
@@ -62,9 +64,12 @@ func (u *authUsecase) Delete(auth *models.Auth) (err error) {
 
 func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 	existingAuth, err := u.authRepo.GetByUsername(params.Username)
+	log.Error("error getting auth: ", err)
 	if err != nil && !utils.IsErrRecordNotFound(err) {
 		return
 	}
+
+	fmt.Println("existingAuth", existingAuth)
 
 	if existingAuth != nil {
 		err = &datatransfers.CustomError{
@@ -72,18 +77,25 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 			Status:  http.StatusBadRequest,
 			Message: "USERNAME_IS_TAKEN",
 		}
+		log.Error("error auth exist: ", err)
 		return
 	}
 
 	hashedPassword, err := helpers.HashPassword(params.Password)
+	log.Error("error hash password", err)
 	if err != nil {
 		return
 	}
 
+	// TODO: handle userID collision if happened
+
 	err = u.authRepo.Create(&models.Auth{
 		Username: params.Username,
 		Password: hashedPassword,
+		UserID:   utils.RandSeq(8),
 	}, u.db)
+	log.Error("error creating auth", err)
+	// TODO: hit user-service internal endpoint to create user
 
 	// TODO: generate token
 	return

@@ -5,19 +5,18 @@ import (
 	"auth-service/datatransfers"
 	"net/http"
 	"strings"
-	"time"
 
 	"gorm.io/gorm"
 )
 
 type Auth struct {
-	ID        uint      `gorm:"primaryKey" json:"id"`
-	UserID    string    `gorm:"type:varchar(8)" json:"userId"`
-	Username  string    `gorm:"index;unique;type:varchar(255)" validate:"required" json:"username"`
-	Password  string    `gorm:"type:varchar(255)" validate:"required" json:"password"`
-	Token     string    `gorm:"-" json:"token"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID        uint   `gorm:"primaryKey" json:"id"`
+	UserID    string `gorm:"index;unique;type:varchar(12)" json:"userId"`
+	Username  string `gorm:"index;unique;type:varchar(255)" validate:"required" json:"username"`
+	Password  string `gorm:"type:varchar(255)" validate:"required" json:"password"`
+	Token     string `gorm:"-" json:"token"`
+	CreatedAt uint   `gorm:"autoCreateTime;<-:create" json:"createdAt"`
+	UpdatedAt uint   `gorm:"autoUpdateTime" json:"updatedAt"`
 }
 
 func (Auth) TableName() string {

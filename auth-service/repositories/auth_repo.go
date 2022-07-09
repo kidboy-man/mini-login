@@ -4,6 +4,7 @@ import (
 	"auth-service/constants"
 	"auth-service/datatransfers"
 	"auth-service/models"
+	"log"
 	"net/http"
 	"strings"
 
@@ -64,7 +65,7 @@ func (r *authRepository) GetAll(params *datatransfers.ListQueryParams) (auths []
 
 func (r *authRepository) GetByID(authID int) (auth *models.Auth, err error) {
 	qs := r.db.Where("id = ?", authID)
-	err = qs.First(auth).Error
+	err = qs.First(&auth).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			err = &datatransfers.CustomError{
@@ -79,13 +80,15 @@ func (r *authRepository) GetByID(authID int) (auth *models.Auth, err error) {
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+		return nil, err
 	}
 	return
 }
 
 func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err error) {
+	log.Println("AUTH", auth)
 	qs := r.db.Where("username = ?", username)
-	err = qs.First(auth).Error
+	err = qs.First(&auth).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			err = &datatransfers.CustomError{
@@ -99,13 +102,15 @@ func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err 
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+		return nil, err
 	}
+	log.Println("AUTH", auth)
 	return
 }
 
 func (r *authRepository) GetByEmail(email string) (auth *models.Auth, err error) {
 	qs := r.db.Where("email = ?", strings.ToLower(strings.TrimSpace(email)))
-	err = qs.First(auth).Error
+	err = qs.First(&auth).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			err = &datatransfers.CustomError{
@@ -119,6 +124,7 @@ func (r *authRepository) GetByEmail(email string) (auth *models.Auth, err error)
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+		return nil, err
 	}
 	return
 }
@@ -131,6 +137,7 @@ func (r *authRepository) Create(auth *models.Auth, db *gorm.DB) (err error) {
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+
 	}
 	return
 }
