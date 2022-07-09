@@ -97,7 +97,6 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 	log.Error("error creating auth", err)
 	// TODO: hit user-service internal endpoint to create user
 
-	// TODO: generate token
 	return
 }
 
@@ -117,6 +116,8 @@ func (u *authUsecase) Login(params *datatransfers.AuthRequest) (auth *models.Aut
 		return nil, err
 	}
 
-	// TODO: generate token
+	auth.Token, err = helpers.GenerateToken(&helpers.UserData{
+		UID: auth.UserID,
+	})
 	return auth, nil
 }
