@@ -13,7 +13,7 @@ func init() {
             Router: "/login",
             AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(
-				param.New("params", param.IsRequired, param.InBody),
+				param.New("params", param.InBody),
 			),
             Filters: nil,
             Params: nil})

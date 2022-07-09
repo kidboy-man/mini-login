@@ -25,9 +25,8 @@ paths:
       - in: body
         name: params
         description: body of this request
-        required: true
         schema:
-          $ref: '#/definitions/models.Auth'
+          $ref: '#/definitions/datatransfers.AuthRequest'
       responses:
         "200":
           description: ""
@@ -48,34 +47,18 @@ paths:
         description: body of this request
         required: true
         schema:
-          $ref: '#/definitions/datatransfers.RegisterRequest'
+          $ref: '#/definitions/datatransfers.AuthRequest'
       responses:
         "200":
           description: ""
         "403":
           description: ""
 definitions:
-  datatransfers.RegisterRequest:
-    title: RegisterRequest
-    type: object
-  models.Auth:
-    title: Auth
+  datatransfers.AuthRequest:
+    title: AuthRequest
     type: object
     properties:
-      createdAt:
-        type: string
-        format: datetime
-      id:
-        type: integer
-        format: int32
       password:
-        type: string
-      token:
-        type: string
-      updatedAt:
-        type: string
-        format: datetime
-      userId:
         type: string
       username:
         type: string

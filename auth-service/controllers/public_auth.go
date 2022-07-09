@@ -22,7 +22,7 @@ func (c *AuthPublicController) Prepare() {
 // @Summary register
 // @Success 200
 // @Failure 403
-// @Param params body datatransfers.RegisterRequest true "body of this request"
+// @Param params body datatransfers.AuthRequest true "body of this request"
 // @router /register [post]
 func (c *AuthPublicController) Register(params *datatransfers.AuthRequest) *JSONResponse {
 	err := c.authUcase.Register(params)
@@ -35,7 +35,7 @@ func (c *AuthPublicController) Register(params *datatransfers.AuthRequest) *JSON
 // @Summary login
 // @Success 200
 // @Failure 403
-// @Param params body models.Auth true "body of this request"
+// @Param params body datatransfers.AuthRequest "body of this request"
 // @router /login [post]
 func (c *AuthPublicController) Login(params *datatransfers.AuthRequest) *JSONResponse {
 	auth, err := c.authUcase.Login(params)

@@ -2,32 +2,14 @@ package helpers
 
 import (
 	"auth-service/conf"
+	"auth-service/middlewares"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
 
-type JWTClaims struct {
-	jwt.StandardClaims
-	UID      string `json:"uid"`
-	Username string `json:"username"`
-	IsAdmin  bool   `json:"isAdmin"`
-}
-
-type JWTConfig struct {
-	JWTPrivateKey     string
-	JWTPublicKey      string
-	JWTExpirationTime time.Duration
-}
-
-type UserData struct {
-	UID      string `json:"uid"`
-	Username string `json:"username"`
-	IsAdmin  bool   `json:"isAdmin"`
-}
-
-func GenerateToken(userData *UserData) (result string, err error) {
-	claims := JWTClaims{
+func GenerateToken(userData *middlewares.UserData) (result string, err error) {
+	claims := middlewares.JWTClaims{
 		StandardClaims: jwt.StandardClaims{
 			Issuer:    "my-auth-service",
 			ExpiresAt: time.Now().Add(conf.AppConfig.JWTConfig.JWTExpirationTime).Unix(),

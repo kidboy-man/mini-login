@@ -4,6 +4,7 @@ import (
 	"auth-service/constants"
 	"auth-service/datatransfers"
 	"auth-service/helpers"
+	"auth-service/middlewares"
 	"auth-service/models"
 	repository "auth-service/repositories"
 	"auth-service/utils"
@@ -116,7 +117,7 @@ func (u *authUsecase) Login(params *datatransfers.AuthRequest) (auth *models.Aut
 		return nil, err
 	}
 
-	auth.Token, err = helpers.GenerateToken(&helpers.UserData{
+	auth.Token, err = helpers.GenerateToken(&middlewares.UserData{
 		UID: auth.UserID,
 	})
 	log.Error("error generating token", err)
