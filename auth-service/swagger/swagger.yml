@@ -1,0 +1,85 @@
+swagger: "2.0"
+info:
+  title: beego Test API
+  description: |
+    beego has a very cool tools to autogenerate documents for your API
+  version: 1.0.0
+  termsOfService: http://beego.me/
+  contact:
+    email: astaxie@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+basePath: /auth-service/v1
+paths:
+  /public/auths/login:
+    post:
+      tags:
+      - public/auths
+      summary: login
+      description: |-
+        login
+        <br>
+      operationId: AuthPublicController.Login
+      parameters:
+      - in: body
+        name: params
+        description: body of this request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Auth'
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+  /public/auths/register:
+    post:
+      tags:
+      - public/auths
+      summary: register
+      description: |-
+        register
+        <br>
+      operationId: AuthPublicController.Register
+      parameters:
+      - in: body
+        name: params
+        description: body of this request
+        required: true
+        schema:
+          $ref: '#/definitions/datatransfers.RegisterRequest'
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+definitions:
+  datatransfers.RegisterRequest:
+    title: RegisterRequest
+    type: object
+  models.Auth:
+    title: Auth
+    type: object
+    properties:
+      createdAt:
+        type: string
+        format: datetime
+      id:
+        type: integer
+        format: int32
+      password:
+        type: string
+      token:
+        type: string
+      updatedAt:
+        type: string
+        format: datetime
+      userId:
+        type: string
+      username:
+        type: string
+tags:
+- name: public/auths
+  description: |
+    Operations about object
