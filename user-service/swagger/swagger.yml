@@ -10,83 +10,34 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-basePath: /user/v1
+basePath: /user-service/v1
 paths:
-  /public/users/login:
-    post:
+  /admin/users/:
+    get:
       tags:
-      - public/users
-      summary: login
+      - admin/users
+      summary: Get Users
       description: |-
-        login
+        Get Users
         <br>
-      operationId: UserPublicController.Login
+      operationId: UserAdminController.Get Users
       parameters:
-      - in: body
-        name: params
-        description: body of this request
-        required: true
-        schema:
-          $ref: '#/definitions/models.User'
-      responses:
-        "200":
-          description: ""
-        "403":
-          description: ""
-  /public/users/register:
-    post:
-      tags:
-      - public/users
-      summary: register
-      description: |-
-        register
-        <br>
-      operationId: UserPublicController.Register
-      parameters:
-      - in: body
-        name: params
-        description: body of this request
-        required: true
-        schema:
-          $ref: '#/definitions/datatransfers.RegisterRequest'
-      responses:
-        "200":
-          description: ""
-        "403":
-          description: ""
-definitions:
-  datatransfers.RegisterRequest:
-    title: RegisterRequest
-    type: object
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-      username:
-        type: string
-  models.User:
-    title: User
-    type: object
-    properties:
-      createdAt:
-        type: string
-        format: datetime
-      email:
-        type: string
-      id:
+      - in: query
+        name: limit
+        description: limit of this request
         type: integer
-        format: int32
-      password:
-        type: string
-      token:
-        type: string
-      updatedAt:
-        type: string
-        format: datetime
-      username:
-        type: string
+        format: int64
+      - in: query
+        name: page
+        description: page of this request
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
 tags:
-- name: public/users
+- name: admin/users
   description: |
     Operations about object

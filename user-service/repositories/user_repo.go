@@ -16,8 +16,7 @@ type UserRepository interface {
 	Delete(user *models.User, db *gorm.DB) (err error)
 	GetAll(params *datatransfers.ListQueryParams) (users []*models.User, cnt int64, err error)
 	GetByEmail(email string) (user *models.User, err error)
-	GetByID(userID int) (user *models.User, err error)
-	GetByUsername(username string) (user *models.User, err error)
+	GetByID(userID string) (user *models.User, err error)
 	Update(user *models.User, db *gorm.DB) (err error)
 }
 type userRepository struct {
@@ -30,10 +29,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 func (r *userRepository) GetAll(params *datatransfers.ListQueryParams) (users []*models.User, cnt int64, err error) {
 	qs := r.db
-	if params.IsPublic {
-		qs = qs.Where("is_active = ?", true)
-	}
-
+	// TODO: filter select
 	err = qs.Model(&models.User{}).Count(&cnt).Error
 	if err != nil {
 		err = &datatransfers.CustomError{
@@ -63,7 +59,7 @@ func (r *userRepository) GetAll(params *datatransfers.ListQueryParams) (users []
 	return
 }
 
-func (r *userRepository) GetByID(userID int) (user *models.User, err error) {
+func (r *userRepository) GetByID(userID string) (user *models.User, err error) {
 	qs := r.db.Where("id = ?", userID)
 	err = qs.First(user).Error
 	if err != nil {
@@ -77,26 +73,6 @@ func (r *userRepository) GetByID(userID int) (user *models.User, err error) {
 
 		err = &datatransfers.CustomError{
 			Code:    constants.QueryInternalServerErrCode,
-			Status:  http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	return
-}
-
-func (r *userRepository) GetByUsername(username string) (user *models.User, err error) {
-	qs := r.db.Where("username = ?", username)
-	err = qs.First(user).Error
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			err = &datatransfers.CustomError{
-				Code:    constants.QueryNotFoundErrCode,
-				Status:  http.StatusNotFound,
-				Message: err.Error(),
-			}
-		}
-		err = &datatransfers.CustomError{
-			Code:    constants.InternalServerErrCode,
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}

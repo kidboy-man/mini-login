@@ -13,25 +13,30 @@
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
-    "basePath": "/user/v1",
+    "basePath": "/user-service/v1",
     "paths": {
-        "/public/users/login": {
-            "post": {
+        "/admin/users/": {
+            "get": {
                 "tags": [
-                    "public/users"
+                    "admin/users"
                 ],
-                "summary": "login",
-                "description": "login\n\u003cbr\u003e",
-                "operationId": "UserPublicController.Login",
+                "summary": "Get Users",
+                "description": "Get Users\n\u003cbr\u003e",
+                "operationId": "UserAdminController.Get Users",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "params",
-                        "description": "body of this request",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
+                        "in": "query",
+                        "name": "limit",
+                        "description": "limit of this request",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "description": "page of this request",
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
@@ -41,89 +46,13 @@
                     "403": {
                         "description": ""
                     }
-                }
-            }
-        },
-        "/public/users/register": {
-            "post": {
-                "tags": [
-                    "public/users"
-                ],
-                "summary": "register",
-                "description": "register\n\u003cbr\u003e",
-                "operationId": "UserPublicController.Register",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "params",
-                        "description": "body of this request",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/datatransfers.RegisterRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    },
-                    "403": {
-                        "description": ""
-                    }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "datatransfers.RegisterRequest": {
-            "title": "RegisterRequest",
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.User": {
-            "title": "User",
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string",
-                    "format": "datetime"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string",
-                    "format": "datetime"
-                },
-                "username": {
-                    "type": "string"
                 }
             }
         }
     },
     "tags": [
         {
-            "name": "public/users",
+            "name": "admin/users",
             "description": "Operations about object\n"
         }
     ]
