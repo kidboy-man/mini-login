@@ -2,19 +2,16 @@ package helpers
 
 import (
 	"auth-service/conf"
-	"encoding/base64"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
-)
-
-const (
-	IssuerJWT = "github.com"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type JWTClaims struct {
-	UserData
 	jwt.StandardClaims
+	UID      string `json:"uid"`
+	Username string `json:"username"`
+	IsAdmin  bool   `json:"isAdmin"`
 }
 
 type JWTConfig struct {
@@ -24,41 +21,23 @@ type JWTConfig struct {
 }
 
 type UserData struct {
-	UID     string `json:"uid"`
-	IsAdmin bool   `json:"isAdmin"`
-}
-
-type UserDataAdmin struct {
-	UID     string `json:"uid"`
-	IsAdmin bool   `json:"isAdmin"`
-	RoleIDs []int  `json:"roleIDs"`
-}
-
-type JWTClaimsAdmin struct {
-	UserDataAdmin
-	jwt.StandardClaims
+	UID      string `json:"uid"`
+	Username string `json:"username"`
+	IsAdmin  bool   `json:"isAdmin"`
 }
 
 func GenerateToken(userData *UserData) (result string, err error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
-		"uid":     userData.UID,
-		"isAdmin": userData.IsAdmin,
-		"iss":     IssuerJWT,
-		"sub":     IssuerJWT,
-		"exp":     time.Now().Add(conf.AppConfig.JWTConfig.JWTExpirationTime).Unix(),
-		"iat":     time.Now().Unix(),
-	})
-
-	privateKey, err := base64.StdEncoding.DecodeString(conf.AppConfig.JWTConfig.JWTPrivateKey)
-	if err != nil {
-		return
+	claims := JWTClaims{
+		StandardClaims: jwt.StandardClaims{
+			Issuer:    "my-auth-service",
+			ExpiresAt: time.Now().Add(conf.AppConfig.JWTConfig.JWTExpirationTime).Unix(),
+		},
+		UID:      userData.UID,
+		Username: userData.Username,
+		IsAdmin:  userData.IsAdmin,
 	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	key, err := jwt.ParseRSAPrivateKeyFromPEM(privateKey)
-	if err != nil {
-		return
-	}
-
-	result, err = token.SignedString(key)
+	result, err = token.SignedString([]byte(conf.AppConfig.JWTConfig.JWTPrivateKey))
 	return
 }

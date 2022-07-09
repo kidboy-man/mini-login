@@ -4,7 +4,10 @@ go 1.18
 
 require github.com/beego/beego/v2 v2.0.1
 
-require github.com/smartystreets/goconvey v1.6.4
+require (
+	github.com/golang-jwt/jwt/v4 v4.4.2
+	github.com/smartystreets/goconvey v1.6.4
+)
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect

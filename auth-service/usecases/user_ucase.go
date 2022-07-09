@@ -119,5 +119,11 @@ func (u *authUsecase) Login(params *datatransfers.AuthRequest) (auth *models.Aut
 	auth.Token, err = helpers.GenerateToken(&helpers.UserData{
 		UID: auth.UserID,
 	})
+	log.Error("error generating token", err)
+	if err != nil {
+		return
+	}
+
+	log.Debug("auth.Token = %v", auth.Token)
 	return auth, nil
 }

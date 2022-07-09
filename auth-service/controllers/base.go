@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"auth-service/datatransfers"
-	"encoding/json"
-	"log"
 	"net/http"
 
 	beego "github.com/beego/beego/v2/server/web"
@@ -31,11 +29,7 @@ type JSONResponse struct {
 func doReturnOK(response *JSONResponse, obj interface{}) {
 	response.Success = true
 	response.Status = http.StatusOK
-	json, err := json.Marshal(obj)
-	if err != nil {
-		log.Panic(err)
-	}
-	response.Data = string(json)
+	response.Data = obj
 	return
 }
 
