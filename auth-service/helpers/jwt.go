@@ -20,6 +20,6 @@ func GenerateToken(userData *middlewares.UserData) (result string, err error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	result, err = token.SignedString([]byte(conf.AppConfig.JWTConfig.JWTPrivateKey))
+	result, err = token.SignedString([]byte(conf.AppConfig.JWTConfig.JWTSignatureKey))
 	return
 }

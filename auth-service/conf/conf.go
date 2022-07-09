@@ -14,7 +14,11 @@ var AppConfig Config
 type Config struct {
 	DbClient *gorm.DB
 
-	JWTConfig         *JWTConfig
+	JWTConfig *JWTConfig
+}
+
+type JWTConfig struct {
+	JWTSignatureKey   string
 	JWTExpirationTime time.Duration
 }
 
@@ -26,21 +30,16 @@ func init() {
 
 	AppConfig.JWTConfig = &JWTConfig{}
 
-	AppConfig.JWTConfig.JWTPrivateKey = os.Getenv("jwt_private_key")
-	if AppConfig.JWTConfig.JWTPrivateKey == "" {
-		panic("jwt_private_key not set")
+	AppConfig.JWTConfig.JWTSignatureKey = os.Getenv("jwt_signature_key")
+	if AppConfig.JWTConfig.JWTSignatureKey == "" {
+		panic("jwt_signature_key not set")
 	}
 
-	AppConfig.JWTConfig.JWTPublicKey = os.Getenv("jwt_public_key")
-	if AppConfig.JWTConfig.JWTPublicKey == "" {
-		panic("jwt_public_key not set")
-	}
-
-	jwtExpirationTimeStr := os.Getenv("jwt_public_key")
+	jwtExpirationTimeStr := os.Getenv("jwt_expiration_time")
 	jwtExpirationTime, _ := strconv.Atoi(jwtExpirationTimeStr)
 	if jwtExpirationTime == 0 {
 		jwtExpirationTime = 24 * 60 * 60
 	}
-	AppConfig.JWTExpirationTime = time.Duration(jwtExpirationTime) * time.Second
+	AppConfig.JWTConfig.JWTExpirationTime = time.Duration(jwtExpirationTime) * time.Second
 
 }

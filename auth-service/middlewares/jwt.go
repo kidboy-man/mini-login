@@ -22,7 +22,7 @@ type JWTClaims struct {
 }
 
 type JWTConfig struct {
-	JWTPrivateKey     string
+	JWTSignatureKey   string
 	JWTPublicKey      string
 	JWTExpirationTime time.Duration
 }
@@ -88,7 +88,7 @@ func getToken(r *http.Request) (token string, err error) {
 func parseTokenJWT(token string) (isVerified bool, result *JWTClaims, err error) {
 	result = &JWTClaims{}
 	jwtClaims, err := jwt.ParseWithClaims(token, result, func(token *jwt.Token) (interface{}, error) {
-		return conf.AppConfig.JWTConfig.JWTPrivateKey, nil
+		return conf.AppConfig.JWTConfig.JWTSignatureKey, nil
 	})
 
 	if result == nil || jwtClaims == nil || !jwtClaims.Valid || err != nil {
