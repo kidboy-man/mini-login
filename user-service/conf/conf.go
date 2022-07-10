@@ -27,7 +27,7 @@ type JWTConfig struct {
 func init() {
 	err := godotenv.Load() //Load .env file
 	if err != nil {
-		panic(err)
+		log.Println("error loading .env file: ", err)
 	}
 
 	beego.BConfig.RunMode = os.Getenv("beego_runmode")
