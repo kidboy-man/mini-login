@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/beego/beego/v2/server/web"
+	beego "github.com/beego/beego/v2/server/web"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
@@ -31,6 +31,9 @@ func init() {
 		panic("fail to load .env file")
 	}
 
+	beego.BConfig.RunMode = os.Getenv("beego_runmode")
+	log.Println("beego.BConfig.RunMode", beego.BConfig.RunMode)
+
 	AppConfig.JWTConfig = &JWTConfig{}
 
 	AppConfig.JWTConfig.JWTSignatureKey = os.Getenv("jwt_signature_key")
@@ -38,7 +41,7 @@ func init() {
 		panic("jwt_signature_key not set")
 	}
 
-	AppConfig.UserServiceURL, _ = web.AppConfig.String("user_service_url")
+	AppConfig.UserServiceURL, _ = beego.AppConfig.String("user_service_url")
 	log.Println("AppConfig.UserServiceURL", AppConfig.UserServiceURL)
 
 	jwtExpirationTimeStr := os.Getenv("jwt_expiration_time")

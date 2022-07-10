@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "beego Test API",
-        "description": "beego has a very cool tools to autogenerate documents for your API\n",
+        "title": "beego Auth-Service API",
+        "description": "beego has a very cool tools to autogenerate documents for your API",
         "version": "1.0.0",
         "termsOfService": "http://beego.me/",
         "contact": {
@@ -21,7 +21,7 @@
                     "public/auths"
                 ],
                 "summary": "login",
-                "description": "login\n\u003cbr\u003e",
+                "description": "login",
                 "operationId": "AuthPublicController.Login",
                 "parameters": [
                     {
@@ -49,7 +49,7 @@
                     "public/auths"
                 ],
                 "summary": "register",
-                "description": "register\n\u003cbr\u003e",
+                "description": "register",
                 "operationId": "AuthPublicController.Register",
                 "parameters": [
                     {
