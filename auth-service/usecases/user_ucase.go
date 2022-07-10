@@ -6,9 +6,10 @@ import (
 	"auth-service/helpers"
 	"auth-service/middlewares"
 	"auth-service/models"
+	externalModels "auth-service/models/external"
 	repository "auth-service/repositories"
+	externalRepository "auth-service/repositories/external"
 	"auth-service/utils"
-	"fmt"
 	"net/http"
 
 	"github.com/prometheus/common/log"
@@ -28,12 +29,15 @@ type AuthUsecase interface {
 type authUsecase struct {
 	db       *gorm.DB
 	authRepo repository.AuthRepository
+	userRepo externalRepository.UserRepository
 }
 
 func NewAuthUsecase(db *gorm.DB) AuthUsecase {
 	authRepo := repository.NewAuthRepository(db)
+	userRepo := externalRepository.NewUserRepository()
 	return &authUsecase{
 		authRepo: authRepo,
+		userRepo: userRepo,
 		db:       db,
 	}
 }
@@ -65,12 +69,10 @@ func (u *authUsecase) Delete(auth *models.Auth) (err error) {
 
 func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 	existingAuth, err := u.authRepo.GetByUsername(params.Username)
-	log.Error("error getting auth: ", err)
 	if err != nil && !utils.IsErrRecordNotFound(err) {
+		log.Error("error getting auth: ", err)
 		return
 	}
-
-	fmt.Println("existingAuth", existingAuth)
 
 	if existingAuth != nil {
 		err = &datatransfers.CustomError{
@@ -78,26 +80,39 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 			Status:  http.StatusBadRequest,
 			Message: "USERNAME_IS_TAKEN",
 		}
-		log.Error("error auth exist: ", err)
 		return
 	}
 
 	hashedPassword, err := helpers.HashPassword(params.Password)
-	log.Error("error hash password", err)
 	if err != nil {
+		log.Error("error hash password", err)
 		return
 	}
 
 	// TODO: handle userID collision if happened
 
+	tx := u.db.Begin()
+	userID := utils.RandSeq(8)
 	err = u.authRepo.Create(&models.Auth{
 		Username: params.Username,
 		Password: hashedPassword,
-		UserID:   utils.RandSeq(8),
-	}, u.db)
-	log.Error("error creating auth", err)
-	// TODO: hit user-service internal endpoint to create user
+		UserID:   userID,
+	}, tx)
+	if err != nil {
+		log.Error("error creating auth", err)
+		tx.Rollback()
+		return
+	}
 
+	err = u.userRepo.Create(&externalModels.User{
+		ID: userID,
+	})
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
 	return
 }
 
@@ -120,11 +135,9 @@ func (u *authUsecase) Login(params *datatransfers.AuthRequest) (auth *models.Aut
 	auth.Token, err = helpers.GenerateToken(&middlewares.UserData{
 		UID: auth.UserID,
 	})
-	log.Error("error generating token", err)
 	if err != nil {
 		return
 	}
 
-	log.Debug("auth.Token = %v", auth.Token)
 	return auth, nil
 }

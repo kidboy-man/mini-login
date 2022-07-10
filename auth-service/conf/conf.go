@@ -1,10 +1,12 @@
 package conf
 
 import (
+	"log"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/beego/beego/v2/server/web"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
@@ -12,7 +14,8 @@ import (
 var AppConfig Config
 
 type Config struct {
-	DbClient *gorm.DB
+	DbClient       *gorm.DB
+	UserServiceURL string
 
 	JWTConfig *JWTConfig
 }
@@ -34,6 +37,9 @@ func init() {
 	if AppConfig.JWTConfig.JWTSignatureKey == "" {
 		panic("jwt_signature_key not set")
 	}
+
+	AppConfig.UserServiceURL, _ = web.AppConfig.String("user_service_url")
+	log.Println("AppConfig.UserServiceURL", AppConfig.UserServiceURL)
 
 	jwtExpirationTimeStr := os.Getenv("jwt_expiration_time")
 	jwtExpirationTime, _ := strconv.Atoi(jwtExpirationTimeStr)

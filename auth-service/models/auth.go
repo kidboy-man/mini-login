@@ -14,6 +14,7 @@ type Auth struct {
 	UserID    string `gorm:"index;unique;type:varchar(12)" json:"userId"`
 	Username  string `gorm:"index;unique;type:varchar(255)" validate:"required" json:"username"`
 	Password  string `gorm:"type:varchar(255)" validate:"required" json:"-"`
+	IsAdmin   *bool  `gorm:"type:boolean;default:false" json:"isadmin"`
 	Token     string `gorm:"-" json:"token"`
 	CreatedAt uint   `gorm:"autoCreateTime;<-:create" json:"createdAt"`
 	UpdatedAt uint   `gorm:"autoUpdateTime" json:"updatedAt"`
