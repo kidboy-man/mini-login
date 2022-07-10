@@ -31,6 +31,7 @@ func init() {
 		),
 
 		beego.NSNamespace("/internal/users",
+			beego.NSBefore(middlewares.IsPrivateIP),
 			beego.NSInclude(
 				&controllers.UserInternalController{},
 			),
