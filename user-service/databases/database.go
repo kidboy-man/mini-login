@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"user-service/conf"
@@ -11,8 +12,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
-
-var db *gorm.DB //database
 
 func InitDB() {
 
@@ -36,10 +35,40 @@ func InitDB() {
 	}
 
 	conf.AppConfig.DbClient = conn
-	conf.AppConfig.DbClient.Debug().AutoMigrate(&models.User{}) // Database migration
+	err = conf.AppConfig.DbClient.Debug().AutoMigrate(&models.User{}) // Database migration
+	if err != nil {
+		panic(err)
+	}
+
+	if err := conf.AppConfig.DbClient.First(&models.User{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		//Insert seed data
+		err = conf.AppConfig.DbClient.Model(&models.User{}).Create([]*models.User{
+			{
+				ID:       "esYyQJL2",
+				FullName: "Admin",
+				Email:    "admin@example.com",
+			},
+
+			{
+				ID:       "esYyQJL3",
+				FullName: "Regular User 1",
+				Email:    "user1@example.com",
+			},
+
+			{
+				ID:       "esYyQJL5",
+				FullName: "Regular User 2",
+				Email:    "user2@example.com",
+			},
+		}).Error
+		if err != nil {
+			panic(err)
+		}
+	}
+
 }
 
 // returns a handle to the DB object
 func GetDB() *gorm.DB {
-	return db
+	return conf.AppConfig.DbClient
 }
