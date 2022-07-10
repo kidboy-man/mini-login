@@ -59,6 +59,13 @@
                 "operationId": "UserAdminController.Get User Details",
                 "parameters": [
                     {
+                        "in": "header",
+                        "name": "authorization",
+                        "description": "bearer token in jwt",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "in": "path",
                         "name": "userID",
                         "description": "user id",
@@ -83,6 +90,13 @@
                 "description": "Update User\n\u003cbr\u003e",
                 "operationId": "UserAdminController.Update User",
                 "parameters": [
+                    {
+                        "in": "header",
+                        "name": "authorization",
+                        "description": "bearer token in jwt",
+                        "required": true,
+                        "type": "string"
+                    },
                     {
                         "in": "path",
                         "name": "userID",
@@ -118,12 +132,55 @@
                 "operationId": "UserAdminController.Delete User",
                 "parameters": [
                     {
+                        "in": "header",
+                        "name": "authorization",
+                        "description": "bearer token in jwt",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "in": "path",
                         "name": "userID",
                         "description": "user id",
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/internal/users/": {
+            "post": {
+                "tags": [
+                    "internal/users"
+                ],
+                "summary": "Create User",
+                "description": "Create User\n\u003cbr\u003e",
+                "operationId": "UserInternalController.Create User",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "authorization",
+                        "description": "bearer token in jwt",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "params",
+                        "description": "body of this request",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
                     }
                 ],
                 "responses": {
@@ -150,11 +207,6 @@
                         "name": "authorization",
                         "description": "bearer token in jwt",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "userID",
                         "type": "string"
                     }
                 ],
@@ -220,6 +272,29 @@
                     "type": "string"
                 }
             }
+        },
+        "models.User": {
+            "title": "User",
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
         }
     },
     "tags": [
@@ -229,6 +304,10 @@
         },
         {
             "name": "private/users",
+            "description": "Operations about object\n"
+        },
+        {
+            "name": "internal/users",
             "description": "Operations about object\n"
         }
     ]

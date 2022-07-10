@@ -53,6 +53,17 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["user-service/controllers:UserInternalController"] = append(beego.GlobalControllerRouter["user-service/controllers:UserInternalController"],
+        beego.ControllerComments{
+            Method: "CreateUser",
+            Router: "/",
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(
+				param.New("params", param.IsRequired, param.InBody),
+			),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"] = append(beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"],
         beego.ControllerComments{
             Method: "GetUser",

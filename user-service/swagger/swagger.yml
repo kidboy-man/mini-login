@@ -47,6 +47,11 @@ paths:
         <br>
       operationId: UserAdminController.Get User Details
       parameters:
+      - in: header
+        name: authorization
+        description: bearer token in jwt
+        required: true
+        type: string
       - in: path
         name: userID
         description: user id
@@ -66,6 +71,11 @@ paths:
         <br>
       operationId: UserAdminController.Update User
       parameters:
+      - in: header
+        name: authorization
+        description: bearer token in jwt
+        required: true
+        type: string
       - in: path
         name: userID
         description: user id
@@ -91,12 +101,43 @@ paths:
         <br>
       operationId: UserAdminController.Delete User
       parameters:
+      - in: header
+        name: authorization
+        description: bearer token in jwt
+        required: true
+        type: string
       - in: path
         name: userID
         description: user id
         required: true
         type: integer
         format: int64
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+  /internal/users/:
+    post:
+      tags:
+      - internal/users
+      summary: Create User
+      description: |-
+        Create User
+        <br>
+      operationId: UserInternalController.Create User
+      parameters:
+      - in: header
+        name: authorization
+        description: bearer token in jwt
+        required: true
+        type: string
+      - in: body
+        name: params
+        description: body of this request
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
       responses:
         "200":
           description: ""
@@ -116,9 +157,6 @@ paths:
         name: authorization
         description: bearer token in jwt
         required: true
-        type: string
-      - in: query
-        name: userID
         type: string
       responses:
         "200":
@@ -162,10 +200,29 @@ definitions:
         type: string
       fullName:
         type: string
+  models.User:
+    title: User
+    type: object
+    properties:
+      createdAt:
+        type: integer
+        format: int32
+      email:
+        type: string
+      fullName:
+        type: string
+      id:
+        type: string
+      updatedAt:
+        type: integer
+        format: int32
 tags:
 - name: admin/users
   description: |
     Operations about object
 - name: private/users
+  description: |
+    Operations about object
+- name: internal/users
   description: |
     Operations about object
