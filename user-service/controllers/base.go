@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 	"user-service/datatransfers"
 
@@ -34,15 +33,12 @@ func doReturnOK(response *JSONResponse, obj interface{}) {
 }
 
 func doReturnNotOK(response *JSONResponse, err error) {
-	log.Println("error", err)
 	response.Success = false
 	response.Status = http.StatusInternalServerError
 	if v, ok := err.(*datatransfers.CustomError); ok {
-		log.Println("ok ", ok)
 		response.Error = v
 		response.Status = v.Status
 
-		log.Println("response", response)
 		return
 	}
 
@@ -58,11 +54,11 @@ func (c *BaseController) ReturnJSONResponse(obj interface{}, err error) *JSONRes
 	}
 
 	c.Ctx.Output.SetStatus(c.JSONResponse.Status)
-	log.Println("c.JSONResponse", c.JSONResponse)
+
 	return c.JSONResponse
 }
 
-func (c *BaseController) SetPagination(ctx *context.Context, totalData int64, limit, page int) {
+func (c *BaseController) setPagination(ctx *context.Context, totalData int64, limit, page int) {
 	paginator := pagination.SetPaginator(ctx, limit, totalData)
 	c.JSONResponse.CurrentPage = page
 	c.JSONResponse.TotalPages = paginator.PageNums()
@@ -74,4 +70,10 @@ func (c *BaseController) SetPagination(ctx *context.Context, totalData int64, li
 func (c *BaseController) GetUserIDFromToken() (uid string) {
 	uid = c.Ctx.Input.GetData("uid").(string)
 	return
+}
+
+func (c *BaseController) ReturnJSONListResponse(obj interface{}, cnt int64, limit, page int, err error) *JSONResponse {
+	c.JSONResponse = c.ReturnJSONResponse(obj, err)
+	c.setPagination(c.Ctx, cnt, limit, page)
+	return c.JSONResponse
 }

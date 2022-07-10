@@ -5,8 +5,6 @@ import (
 	"user-service/datatransfers"
 	"user-service/models"
 	usecase "user-service/usecases"
-
-	"log"
 )
 
 // Operations about object
@@ -26,12 +24,8 @@ func (c *UserPrivateController) Prepare() {
 // @Failure 403
 // @Param authorization header string true "bearer token in jwt"
 // @router /my [get]
-func (c *UserPrivateController) GetUser() *JSONResponse {
-	userID := c.GetUserIDFromToken()
-	log.Println("userID: ", userID)
-	user, err := c.userUcase.GetByID(userID)
-	log.Println("err: ", err)
-
+func (c *UserPrivateController) GetMyProfile(userID string) *JSONResponse {
+	user, err := c.userUcase.GetByID(c.GetUserIDFromToken())
 	return c.ReturnJSONResponse(user, err)
 }
 

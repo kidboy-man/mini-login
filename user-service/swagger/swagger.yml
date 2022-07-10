@@ -19,6 +19,11 @@ paths:
       description: Get Users
       operationId: UserAdminController.Get Users
       parameters:
+      - in: header
+        name: authorization
+        description: bearer token in jwt
+        required: true
+        type: string
       - in: query
         name: limit
         description: limit of this request
@@ -144,6 +149,9 @@ paths:
         name: authorization
         description: bearer token in jwt
         required: true
+        type: string
+      - in: query
+        name: userID
         type: string
       responses:
         "200":

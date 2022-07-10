@@ -23,17 +23,17 @@ func (c *UserAdminController) Prepare() {
 // @Summary Get Users
 // @Success 200
 // @Failure 403
+// @Param authorization header string true "bearer token in jwt"
 // @Param limit query int false "limit of this request"
 // @Param page query int false "page of this request"
 // @router / [get]
 func (c *UserAdminController) GetUsers(limit, page int) *JSONResponse {
-	users, _, err := c.userUcase.GetAll(&datatransfers.ListQueryParams{
+	users, cnt, err := c.userUcase.GetAll(&datatransfers.ListQueryParams{
 		Limit:  limit,
 		Offset: utils.CalculateOffset(limit, page),
 	})
 
-	// TODO: set paginator
-	return c.ReturnJSONResponse(users, err)
+	return c.ReturnJSONListResponse(users, cnt, limit, page, err)
 }
 
 // @Title Get User Details

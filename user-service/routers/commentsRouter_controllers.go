@@ -66,10 +66,12 @@ func init() {
 
     beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"] = append(beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"],
         beego.ControllerComments{
-            Method: "GetUser",
+            Method: "GetMyProfile",
             Router: "/my",
             AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
+            MethodParams: param.Make(
+				param.New("userID"),
+			),
             Filters: nil,
             Params: nil})
 

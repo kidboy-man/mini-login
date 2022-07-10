@@ -3,7 +3,6 @@ package middlewares
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -49,7 +48,6 @@ func VerifyToken(ctx *context.Context) {
 		return
 	}
 
-	log.Println("userData: ", userData)
 	ctx.Input.SetData("uid", userData.UID)
 	ctx.Input.SetData("isAdmin", userData.IsAdmin)
 }
