@@ -53,4 +53,25 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"] = append(beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"],
+        beego.ControllerComments{
+            Method: "GetUser",
+            Router: "/my",
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"] = append(beego.GlobalControllerRouter["user-service/controllers:UserPrivateController"],
+        beego.ControllerComments{
+            Method: "UpdateUser",
+            Router: "/my",
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(
+				param.New("userID"),
+				param.New("params", param.IsRequired, param.InBody),
+			),
+            Filters: nil,
+            Params: nil})
+
 }

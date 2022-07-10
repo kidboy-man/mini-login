@@ -41,6 +41,7 @@ func (c *UserAdminController) GetUsers(limit, page int) *JSONResponse {
 // @Summary Get User Details
 // @Success 200
 // @Failure 403
+// @Param authorization header string true "bearer token in jwt"
 // @Param userID path string true "user id"
 // @router /:userID [get]
 func (c *UserAdminController) GetUser(userID string) *JSONResponse {
@@ -53,6 +54,7 @@ func (c *UserAdminController) GetUser(userID string) *JSONResponse {
 // @Summary Update User
 // @Success 200
 // @Failure 403
+// @Param authorization header string true "bearer token in jwt"
 // @Param userID path string true "user id"
 // @Param params body datatransfers.UpdateUserRequest true "body of this request"
 // @router /:userID [put]
@@ -71,6 +73,7 @@ func (c *UserAdminController) UpdateUser(userID string, params *datatransfers.Up
 // @Summary Delete User
 // @Success 200
 // @Failure 403
+// @Param authorization header string true "bearer token in jwt"
 // @Param userID path int true "user id"
 // @router /:userID [delete]
 func (c *UserAdminController) DeleteUser(userID string) *JSONResponse {

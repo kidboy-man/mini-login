@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"user-service/datatransfers"
 
@@ -17,8 +18,8 @@ type BaseController struct {
 type JSONResponse struct {
 	Success     bool        `json:"success"`
 	Status      int         `json:"status"` // http status code
-	Data        interface{} `json:"data"`
-	Error       error       `json:"error"`
+	Data        interface{} `json:"data"`   //
+	Error       error       `json:"error"`  //
 	CurrentPage int         `json:"currentPage"`
 	TotalPages  int         `json:"totalPages"`
 	DataPerPage int         `json:"dataPerPage"`
@@ -30,20 +31,22 @@ func doReturnOK(response *JSONResponse, obj interface{}) {
 	response.Success = true
 	response.Status = http.StatusOK
 	response.Data = obj
-	return
 }
 
 func doReturnNotOK(response *JSONResponse, err error) {
+	log.Println("error", err)
 	response.Success = false
 	response.Status = http.StatusInternalServerError
 	if v, ok := err.(*datatransfers.CustomError); ok {
+		log.Println("ok ", ok)
 		response.Error = v
 		response.Status = v.Status
+
+		log.Println("response", response)
 		return
 	}
 
 	response.Error = err
-	return
 }
 
 func (c *BaseController) ReturnJSONResponse(obj interface{}, err error) *JSONResponse {
@@ -55,6 +58,7 @@ func (c *BaseController) ReturnJSONResponse(obj interface{}, err error) *JSONRes
 	}
 
 	c.Ctx.Output.SetStatus(c.JSONResponse.Status)
+	log.Println("c.JSONResponse", c.JSONResponse)
 	return c.JSONResponse
 }
 
@@ -65,5 +69,9 @@ func (c *BaseController) SetPagination(ctx *context.Context, totalData int64, li
 	c.JSONResponse.DataPerPage = limit
 	c.JSONResponse.HasNextPage = paginator.HasNext()
 	c.JSONResponse.HasPrevPage = paginator.HasPrev()
+}
+
+func (c *BaseController) GetUserIDFromToken() (uid string) {
+	uid = c.Ctx.Input.GetData("uid").(string)
 	return
 }

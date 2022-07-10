@@ -37,7 +37,135 @@ paths:
           description: ""
         "403":
           description: ""
+  /admin/users/{userID}:
+    get:
+      tags:
+      - admin/users
+      summary: Get User Details
+      description: |-
+        Get User Details
+        <br>
+      operationId: UserAdminController.Get User Details
+      parameters:
+      - in: path
+        name: userID
+        description: user id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+    put:
+      tags:
+      - admin/users
+      summary: Update User
+      description: |-
+        Update User
+        <br>
+      operationId: UserAdminController.Update User
+      parameters:
+      - in: path
+        name: userID
+        description: user id
+        required: true
+        type: string
+      - in: body
+        name: params
+        description: body of this request
+        required: true
+        schema:
+          $ref: '#/definitions/datatransfers.UpdateUserRequest'
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+    delete:
+      tags:
+      - admin/users
+      summary: Delete User
+      description: |-
+        Delete User
+        <br>
+      operationId: UserAdminController.Delete User
+      parameters:
+      - in: path
+        name: userID
+        description: user id
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+  /private/users/my:
+    get:
+      tags:
+      - private/users
+      summary: Get My Profile
+      description: |-
+        Get My Profile
+        <br>
+      operationId: UserPrivateController.Get My Profile
+      parameters:
+      - in: header
+        name: authorization
+        description: bearer token in jwt
+        required: true
+        type: string
+      - in: query
+        name: userID
+        type: string
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+    put:
+      tags:
+      - private/users
+      summary: Update Profile
+      description: |-
+        Update Profile
+        <br>
+      operationId: UserPrivateController.Update Profile
+      parameters:
+      - in: body
+        name: params
+        description: body of this request
+        required: true
+        schema:
+          $ref: '#/definitions/datatransfers.UpdateUserRequest'
+      - in: header
+        name: authorization
+        description: bearer token in jwt
+        required: true
+        type: string
+      - in: query
+        name: userID
+        type: string
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: ""
+definitions:
+  datatransfers.UpdateUserRequest:
+    title: UpdateUserRequest
+    type: object
+    properties:
+      email:
+        type: string
+      fullName:
+        type: string
 tags:
 - name: admin/users
+  description: |
+    Operations about object
+- name: private/users
   description: |
     Operations about object
