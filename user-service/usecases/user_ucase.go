@@ -1,9 +1,13 @@
 package usecase
 
 import (
+	"net/http"
+	"net/mail"
+	"user-service/constants"
 	"user-service/datatransfers"
 	"user-service/models"
 	repository "user-service/repositories"
+	"user-service/utils"
 
 	"gorm.io/gorm"
 )
@@ -45,6 +49,37 @@ func (u *userUsecase) Create(user *models.User) (err error) {
 }
 
 func (u *userUsecase) Update(user *models.User) (err error) {
+	if user.Email != "" {
+		// check email format
+		_, err = mail.ParseAddress(user.Email)
+		if err != nil {
+			err = &datatransfers.CustomError{
+				Code:    constants.InvalidEmailFormatErrCode,
+				Status:  http.StatusBadRequest,
+				Message: "INVALID_EMAIL_ADDRESS",
+			}
+			return
+		}
+
+		existingUser, errGetUser := u.userRepo.GetByEmail(user.Email)
+		if errGetUser != nil && !utils.IsErrRecordNotFound(errGetUser) {
+			return errGetUser
+		}
+
+		if existingUser != nil {
+			if existingUser.ID == user.ID {
+				return
+			}
+
+			err = &datatransfers.CustomError{
+				Code:    constants.UpdateUserEmailExistErrCode,
+				Status:  http.StatusBadRequest,
+				Message: "EMAIL_IS_USED",
+			}
+			return
+		}
+	}
+
 	err = u.userRepo.Update(user, u.db)
 	return
 }

@@ -3,7 +3,7 @@ package constants
 // general
 const (
 	InternalServerErrCode = 1001 + iota
-	BadRequesErrCode
+	BadRequestErrCode
 	NotAuthorizedErrCode
 )
 
@@ -15,8 +15,7 @@ const (
 
 // user
 const (
-	RegisterEmailNotAvailableErrCode = 3001 + iota
-	RegisterUsernameNotAvailableErrCode
+	UpdateUserEmailExistErrCode = 3001 + iota
 	HashPasswordInternalErrCode
 	LoginUsernameNotFoundErrCode
 	LoginInvalidPasswordErrCode
