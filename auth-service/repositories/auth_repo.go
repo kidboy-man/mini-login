@@ -4,7 +4,6 @@ import (
 	"auth-service/constants"
 	"auth-service/datatransfers"
 	"auth-service/models"
-	"log"
 	"net/http"
 	"strings"
 
@@ -86,7 +85,6 @@ func (r *authRepository) GetByID(authID int) (auth *models.Auth, err error) {
 }
 
 func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err error) {
-	log.Println("AUTH", auth)
 	qs := r.db.Where("username = ?", username)
 	err = qs.First(&auth).Error
 	if err != nil {
@@ -104,7 +102,6 @@ func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err 
 		}
 		return nil, err
 	}
-	log.Println("AUTH", auth)
 	return
 }
 

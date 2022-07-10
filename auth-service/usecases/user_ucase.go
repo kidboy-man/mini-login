@@ -12,7 +12,6 @@ import (
 	"auth-service/utils"
 	"net/http"
 
-	"github.com/prometheus/common/log"
 	"gorm.io/gorm"
 )
 
@@ -70,7 +69,6 @@ func (u *authUsecase) Delete(auth *models.Auth) (err error) {
 func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 	existingAuth, err := u.authRepo.GetByUsername(params.Username)
 	if err != nil && !utils.IsErrRecordNotFound(err) {
-		log.Error("error getting auth: ", err)
 		return
 	}
 
@@ -85,7 +83,6 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 
 	hashedPassword, err := helpers.HashPassword(params.Password)
 	if err != nil {
-		log.Error("error hash password", err)
 		return
 	}
 
@@ -99,7 +96,6 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 		UserID:   userID,
 	}, tx)
 	if err != nil {
-		log.Error("error creating auth", err)
 		tx.Rollback()
 		return
 	}
@@ -133,7 +129,8 @@ func (u *authUsecase) Login(params *datatransfers.AuthRequest) (auth *models.Aut
 	}
 
 	auth.Token, err = helpers.GenerateToken(&middlewares.UserData{
-		UID: auth.UserID,
+		UID:     auth.UserID,
+		IsAdmin: *auth.IsAdmin,
 	})
 	if err != nil {
 		return

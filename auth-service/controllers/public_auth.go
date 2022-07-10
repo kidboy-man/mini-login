@@ -4,7 +4,6 @@ import (
 	"auth-service/conf"
 	"auth-service/datatransfers"
 	usecase "auth-service/usecases"
-	"log"
 )
 
 // Operations about object
@@ -26,7 +25,6 @@ func (c *AuthPublicController) Prepare() {
 // @router /register [post]
 func (c *AuthPublicController) Register(params *datatransfers.AuthRequest) *JSONResponse {
 	err := c.authUcase.Register(params)
-	log.Println("error registering", err)
 	return c.ReturnJSONResponse(nil, err)
 }
 
