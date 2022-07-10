@@ -1,8 +1,7 @@
 swagger: "2.0"
 info:
-  title: beego Test API
-  description: |
-    beego has a very cool tools to autogenerate documents for your API
+  title: beego User-Service API
+  description: beego has a very cool tools to autogenerate documents for your API
   version: 1.0.0
   termsOfService: http://beego.me/
   contact:
@@ -17,9 +16,7 @@ paths:
       tags:
       - admin/users
       summary: Get Users
-      description: |-
-        Get Users
-        <br>
+      description: Get Users
       operationId: UserAdminController.Get Users
       parameters:
       - in: query
@@ -42,9 +39,7 @@ paths:
       tags:
       - admin/users
       summary: Get User Details
-      description: |-
-        Get User Details
-        <br>
+      description: Get User Details
       operationId: UserAdminController.Get User Details
       parameters:
       - in: header
@@ -66,9 +61,7 @@ paths:
       tags:
       - admin/users
       summary: Update User
-      description: |-
-        Update User
-        <br>
+      description: Update User
       operationId: UserAdminController.Update User
       parameters:
       - in: header
@@ -96,9 +89,7 @@ paths:
       tags:
       - admin/users
       summary: Delete User
-      description: |-
-        Delete User
-        <br>
+      description: Delete User
       operationId: UserAdminController.Delete User
       parameters:
       - in: header
@@ -122,9 +113,7 @@ paths:
       tags:
       - internal/users
       summary: Create User
-      description: |-
-        Create User
-        <br>
+      description: Create User
       operationId: UserInternalController.Create User
       parameters:
       - in: header
@@ -148,9 +137,7 @@ paths:
       tags:
       - private/users
       summary: Get My Profile
-      description: |-
-        Get My Profile
-        <br>
+      description: Get My Profile
       operationId: UserPrivateController.Get My Profile
       parameters:
       - in: header
@@ -167,9 +154,7 @@ paths:
       tags:
       - private/users
       summary: Update Profile
-      description: |-
-        Update Profile
-        <br>
+      description: Update Profile
       operationId: UserPrivateController.Update Profile
       parameters:
       - in: body

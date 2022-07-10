@@ -16,6 +16,7 @@ const (
 // user
 const (
 	UpdateUserEmailExistErrCode = 3001 + iota
+	InvalidEmailFormatErrCode
 	HashPasswordInternalErrCode
 	LoginUsernameNotFoundErrCode
 	LoginInvalidPasswordErrCode

@@ -1,10 +1,12 @@
 package conf
 
 import (
+	"log"
 	"os"
 	"strconv"
 	"time"
 
+	beego "github.com/beego/beego/v2/server/web"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
@@ -27,6 +29,9 @@ func init() {
 	if err != nil {
 		panic("fail to load .env file")
 	}
+
+	beego.BConfig.RunMode = os.Getenv("beego_runmode")
+	log.Println("beego.BConfig.RunMode", beego.BConfig.RunMode)
 
 	AppConfig.JWTConfig = &JWTConfig{}
 

@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "beego Test API",
-        "description": "beego has a very cool tools to autogenerate documents for your API\n",
+        "title": "beego User-Service API",
+        "description": "beego has a very cool tools to autogenerate documents for your API",
         "version": "1.0.0",
         "termsOfService": "http://beego.me/",
         "contact": {
@@ -21,7 +21,7 @@
                     "admin/users"
                 ],
                 "summary": "Get Users",
-                "description": "Get Users\n\u003cbr\u003e",
+                "description": "Get Users",
                 "operationId": "UserAdminController.Get Users",
                 "parameters": [
                     {
@@ -55,7 +55,7 @@
                     "admin/users"
                 ],
                 "summary": "Get User Details",
-                "description": "Get User Details\n\u003cbr\u003e",
+                "description": "Get User Details",
                 "operationId": "UserAdminController.Get User Details",
                 "parameters": [
                     {
@@ -87,7 +87,7 @@
                     "admin/users"
                 ],
                 "summary": "Update User",
-                "description": "Update User\n\u003cbr\u003e",
+                "description": "Update User",
                 "operationId": "UserAdminController.Update User",
                 "parameters": [
                     {
@@ -128,7 +128,7 @@
                     "admin/users"
                 ],
                 "summary": "Delete User",
-                "description": "Delete User\n\u003cbr\u003e",
+                "description": "Delete User",
                 "operationId": "UserAdminController.Delete User",
                 "parameters": [
                     {
@@ -163,7 +163,7 @@
                     "internal/users"
                 ],
                 "summary": "Create User",
-                "description": "Create User\n\u003cbr\u003e",
+                "description": "Create User",
                 "operationId": "UserInternalController.Create User",
                 "parameters": [
                     {
@@ -199,7 +199,7 @@
                     "private/users"
                 ],
                 "summary": "Get My Profile",
-                "description": "Get My Profile\n\u003cbr\u003e",
+                "description": "Get My Profile",
                 "operationId": "UserPrivateController.Get My Profile",
                 "parameters": [
                     {
@@ -224,7 +224,7 @@
                     "private/users"
                 ],
                 "summary": "Update Profile",
-                "description": "Update Profile\n\u003cbr\u003e",
+                "description": "Update Profile",
                 "operationId": "UserPrivateController.Update Profile",
                 "parameters": [
                     {
