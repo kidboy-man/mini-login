@@ -3,6 +3,7 @@ package database
 import (
 	"auth-service/conf"
 	"auth-service/models"
+	"errors"
 	"fmt"
 	"os"
 
@@ -11,8 +12,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
-
-var db *gorm.DB //database
 
 func InitDB() {
 
@@ -36,10 +35,45 @@ func InitDB() {
 	}
 
 	conf.AppConfig.DbClient = conn
-	conf.AppConfig.DbClient.Debug().AutoMigrate(&models.Auth{}) // Database migration
+	err = conf.AppConfig.DbClient.Debug().AutoMigrate(&models.Auth{}) // Database migration
+	if err != nil {
+		panic(err)
+	}
+
+	if err := conf.AppConfig.DbClient.First(&models.Auth{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		//Insert seed data
+		boolFalse := false
+		boolTrue := true
+		err = conf.AppConfig.DbClient.Model(&models.Auth{}).Create([]*models.Auth{
+			{
+				UserID:   "esYyQJL2",
+				Username: "i_am_admin",
+				IsAdmin:  &boolTrue,
+				Password: "$2a$14$85BGgoTo9KmjnuH60j/qiOzp.fQ6TzyZZh5Gs9jwNZP7.x9kKT7Me",
+			},
+
+			{
+				UserID:   "esYyQJL3",
+				Username: "i_am_user_1",
+				IsAdmin:  &boolFalse,
+				Password: "$2a$14$85BGgoTo9KmjnuH60j/qiOzp.fQ6TzyZZh5Gs9jwNZP7.x9kKT7Me",
+			},
+
+			{
+				UserID:   "esYyQJL5",
+				Username: "i_am_user_2",
+				IsAdmin:  &boolFalse,
+				Password: "$2a$14$85BGgoTo9KmjnuH60j/qiOzp.fQ6TzyZZh5Gs9jwNZP7.x9kKT7Me",
+			},
+		}).Error
+		if err != nil {
+			panic(err)
+		}
+	}
+
 }
 
 // returns a handle to the DB object
 func GetDB() *gorm.DB {
-	return db
+	return conf.AppConfig.DbClient
 }
