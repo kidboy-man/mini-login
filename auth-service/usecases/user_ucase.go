@@ -10,6 +10,7 @@ import (
 	repository "auth-service/repositories"
 	externalRepository "auth-service/repositories/external"
 	"auth-service/utils"
+	"log"
 	"net/http"
 
 	"gorm.io/gorm"
@@ -104,6 +105,7 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 		ID: userID,
 	})
 	if err != nil {
+		log.Println("error creating user: ", err)
 		tx.Rollback()
 		return
 	}

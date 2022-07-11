@@ -19,10 +19,8 @@ func main() {
 	math_rand.Seed(int64(binary.LittleEndian.Uint64(b[:])))
 
 	database.InitDB()
-	if beego.BConfig.RunMode == "dev" {
-		beego.BConfig.WebConfig.DirectoryIndex = true
-		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
-	}
+	beego.BConfig.WebConfig.DirectoryIndex = true
+	beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 
 	beego.Run()
 }
