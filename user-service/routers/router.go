@@ -15,7 +15,7 @@ import (
 )
 
 func init() {
-	ns := beego.NewNamespace("/user-service/v1",
+	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/admin/users",
 			beego.NSBefore(middlewares.VerifyTokenAdmin),
 			beego.NSInclude(

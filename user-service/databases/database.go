@@ -18,7 +18,7 @@ func InitDB() {
 
 	err := godotenv.Load() //Load .env file
 	if err != nil {
-		log.Println("error get env ", err)
+		panic(err)
 	}
 
 	username := os.Getenv("db_user")
