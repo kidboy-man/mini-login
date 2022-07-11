@@ -12,7 +12,7 @@ The two microservices are:
 
 ## Service Flow
 
-![Service Flow](https://Mini-Login.drawio.png)
+![Service Flow](service-flow.png)
 
 ## DB Diagram
 
