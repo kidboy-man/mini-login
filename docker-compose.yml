@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  database:
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/data
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    env_file: user-service/.env
+    depends_on:
+      - database
+    networks:
+      - default
+    ports:
+      - "8080:8080"
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    env_file: auth-service/.env
+    depends_on:
+      - database
+    networks:
+      - default
+    ports:
+      - "8081:8081"
+  
