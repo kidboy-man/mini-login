@@ -14,7 +14,7 @@ import (
 )
 
 func init() {
-	ns := beego.NewNamespace("/auth-service/v1",
+	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/public/auths",
 			beego.NSInclude(
 				&controllers.AuthPublicController{},

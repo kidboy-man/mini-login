@@ -13,7 +13,7 @@
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
-    "basePath": "/auth-service/v1",
+    "basePath": "/v1",
     "paths": {
         "/public/auths/login": {
             "post": {
