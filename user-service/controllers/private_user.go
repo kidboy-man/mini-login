@@ -24,7 +24,7 @@ func (c *UserPrivateController) Prepare() {
 // @Failure 403
 // @Param authorization header string true "bearer token in jwt"
 // @router /my [get]
-func (c *UserPrivateController) GetMyProfile(userID string) *JSONResponse {
+func (c *UserPrivateController) GetMyProfile() *JSONResponse {
 	user, err := c.userUcase.GetByID(c.GetUserIDFromToken())
 	return c.ReturnJSONResponse(user, err)
 }
@@ -37,9 +37,9 @@ func (c *UserPrivateController) GetMyProfile(userID string) *JSONResponse {
 // @Param params body datatransfers.UpdateUserRequest true "body of this request"
 // @Param authorization header string true "bearer token in jwt"
 // @router /my [put]
-func (c *UserPrivateController) UpdateUser(userID string, params *datatransfers.UpdateUserRequest) *JSONResponse {
+func (c *UserPrivateController) UpdateUser(params *datatransfers.UpdateUserRequest) *JSONResponse {
 	err := c.userUcase.Update(&models.User{
-		ID:       userID,
+		ID:       c.GetUserIDFromToken(),
 		FullName: params.FullName,
 		Email:    params.Email,
 	})

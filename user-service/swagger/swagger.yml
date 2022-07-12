@@ -150,9 +150,6 @@ paths:
         description: bearer token in jwt
         required: true
         type: string
-      - in: query
-        name: userID
-        type: string
       responses:
         "200":
           description: ""
@@ -175,9 +172,6 @@ paths:
         name: authorization
         description: bearer token in jwt
         required: true
-        type: string
-      - in: query
-        name: userID
         type: string
       responses:
         "200":
