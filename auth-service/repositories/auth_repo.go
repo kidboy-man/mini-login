@@ -5,7 +5,6 @@ import (
 	"auth-service/datatransfers"
 	"auth-service/models"
 	"net/http"
-	"strings"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -72,6 +71,7 @@ func (r *authRepository) GetByID(authID int) (auth *models.Auth, err error) {
 				Status:  http.StatusNotFound,
 				Message: err.Error(),
 			}
+			return nil, err
 		}
 
 		err = &datatransfers.CustomError{
@@ -94,27 +94,7 @@ func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err 
 				Status:  http.StatusNotFound,
 				Message: err.Error(),
 			}
-		}
-		err = &datatransfers.CustomError{
-			Code:    constants.InternalServerErrCode,
-			Status:  http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-		return nil, err
-	}
-	return
-}
-
-func (r *authRepository) GetByEmail(email string) (auth *models.Auth, err error) {
-	qs := r.db.Where("email = ?", strings.ToLower(strings.TrimSpace(email)))
-	err = qs.First(&auth).Error
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			err = &datatransfers.CustomError{
-				Code:    constants.QueryNotFoundErrCode,
-				Status:  http.StatusNotFound,
-				Message: err.Error(),
-			}
+			return nil, err
 		}
 		err = &datatransfers.CustomError{
 			Code:    constants.InternalServerErrCode,
