@@ -25,6 +25,8 @@ func (r *userRepository) Create(user *models.User) (err error) {
 		conf.AppConfig.UserServiceURL,
 	)
 
+	fmt.Println("URL Create User ", url)
+
 	payload, err := json.Marshal(user)
 	if err != nil {
 		return
