@@ -121,11 +121,6 @@ paths:
       description: Create User
       operationId: UserInternalController.Create User
       parameters:
-      - in: header
-        name: authorization
-        description: bearer token in jwt
-        required: true
-        type: string
       - in: body
         name: params
         description: body of this request

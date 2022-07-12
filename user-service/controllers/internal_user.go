@@ -21,7 +21,6 @@ func (c *UserInternalController) Prepare() {
 // @Summary Create User
 // @Success 200
 // @Failure 403
-// @Param authorization header string true "bearer token in jwt"
 // @Param params body models.User true "body of this request"
 // @router / [post]
 func (c *UserInternalController) CreateUser(params *models.User) *JSONResponse {
