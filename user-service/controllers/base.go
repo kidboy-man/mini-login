@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"user-service/datatransfers"
 
@@ -27,6 +28,7 @@ type JSONResponse struct {
 }
 
 func doReturnOK(response *JSONResponse, obj interface{}) {
+	fmt.Println("obj", obj)
 	response.Success = true
 	response.Status = http.StatusOK
 	response.Data = obj

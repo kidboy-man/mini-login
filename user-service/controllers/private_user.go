@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"user-service/conf"
 	"user-service/datatransfers"
 	"user-service/models"
@@ -26,6 +27,7 @@ func (c *UserPrivateController) Prepare() {
 // @router /my [get]
 func (c *UserPrivateController) GetMyProfile() *JSONResponse {
 	user, err := c.userUcase.GetByID(c.GetUserIDFromToken())
+	fmt.Println("USER", user)
 	return c.ReturnJSONResponse(user, err)
 }
 
