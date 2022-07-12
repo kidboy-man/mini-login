@@ -10,6 +10,7 @@ import (
 	repository "auth-service/repositories"
 	externalRepository "auth-service/repositories/external"
 	"auth-service/utils"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -104,6 +105,9 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 	err = u.userRepo.Create(&externalModels.User{
 		ID: userID,
 	})
+
+	fmt.Println("err creating user 109", err)
+	fmt.Println("err != nil 110", err != nil)
 	if err != nil {
 		log.Println("error creating user: ", err)
 		tx.Rollback()

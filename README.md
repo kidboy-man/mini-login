@@ -69,3 +69,14 @@ http://localhost:8081/Swagger
 #### User-Service Swagger: 
 http://localhost:8080/Swagger
 
+
+## Troubleshooting
+
+If the service container is exited/failed, this happens due to it depends on the database. For now, just re-run the corresponding service container. Or you can do docker-compose per service
+
+```bash
+    docker-compose up -d database
+    docker-compose up -d auth-service
+    docker-compose up -d user-service
+```
+

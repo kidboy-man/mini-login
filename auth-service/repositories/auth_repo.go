@@ -5,7 +5,6 @@ import (
 	"auth-service/datatransfers"
 	"auth-service/models"
 	"net/http"
-	"strings"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -58,8 +57,9 @@ func (r *authRepository) GetAll(params *datatransfers.ListQueryParams) (auths []
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+		return
 	}
-	return
+	return auths, cnt, nil
 }
 
 func (r *authRepository) GetByID(authID int) (auth *models.Auth, err error) {
@@ -72,6 +72,7 @@ func (r *authRepository) GetByID(authID int) (auth *models.Auth, err error) {
 				Status:  http.StatusNotFound,
 				Message: err.Error(),
 			}
+			return nil, err
 		}
 
 		err = &datatransfers.CustomError{
@@ -81,7 +82,7 @@ func (r *authRepository) GetByID(authID int) (auth *models.Auth, err error) {
 		}
 		return nil, err
 	}
-	return
+	return auth, nil
 }
 
 func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err error) {
@@ -94,6 +95,7 @@ func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err 
 				Status:  http.StatusNotFound,
 				Message: err.Error(),
 			}
+			return nil, err
 		}
 		err = &datatransfers.CustomError{
 			Code:    constants.InternalServerErrCode,
@@ -102,28 +104,7 @@ func (r *authRepository) GetByUsername(username string) (auth *models.Auth, err 
 		}
 		return nil, err
 	}
-	return
-}
-
-func (r *authRepository) GetByEmail(email string) (auth *models.Auth, err error) {
-	qs := r.db.Where("email = ?", strings.ToLower(strings.TrimSpace(email)))
-	err = qs.First(&auth).Error
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			err = &datatransfers.CustomError{
-				Code:    constants.QueryNotFoundErrCode,
-				Status:  http.StatusNotFound,
-				Message: err.Error(),
-			}
-		}
-		err = &datatransfers.CustomError{
-			Code:    constants.InternalServerErrCode,
-			Status:  http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-		return nil, err
-	}
-	return
+	return auth, nil
 }
 
 func (r *authRepository) Create(auth *models.Auth, db *gorm.DB) (err error) {
@@ -134,9 +115,10 @@ func (r *authRepository) Create(auth *models.Auth, db *gorm.DB) (err error) {
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+		return
 
 	}
-	return
+	return nil
 }
 
 func (r *authRepository) Update(auth *models.Auth, db *gorm.DB) (err error) {
@@ -159,7 +141,7 @@ func (r *authRepository) Update(auth *models.Auth, db *gorm.DB) (err error) {
 		}
 		return
 	}
-	return
+	return nil
 }
 
 func (r *authRepository) Delete(auth *models.Auth, db *gorm.DB) (err error) {
@@ -182,5 +164,5 @@ func (r *authRepository) Delete(auth *models.Auth, db *gorm.DB) (err error) {
 		}
 		return
 	}
-	return
+	return nil
 }

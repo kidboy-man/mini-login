@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"reflect"
 	"user-service/datatransfers"
 
 	beego "github.com/beego/beego/v2/server/web"
@@ -48,7 +47,7 @@ func doReturnNotOK(response *JSONResponse, err error) {
 
 func (c *BaseController) ReturnJSONResponse(obj interface{}, err error) *JSONResponse {
 	c.JSONResponse = &JSONResponse{}
-	if !reflect.ValueOf(err).IsNil() {
+	if err != nil {
 		doReturnNotOK(c.JSONResponse, err)
 	} else {
 		doReturnOK(c.JSONResponse, obj)

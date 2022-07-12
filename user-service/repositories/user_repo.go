@@ -56,7 +56,7 @@ func (r *userRepository) GetAll(params *datatransfers.ListQueryParams) (users []
 			Message: err.Error(),
 		}
 	}
-	return
+	return users, cnt, nil
 }
 
 func (r *userRepository) GetByID(userID string) (user *models.User, err error) {
@@ -69,6 +69,7 @@ func (r *userRepository) GetByID(userID string) (user *models.User, err error) {
 				Status:  http.StatusNotFound,
 				Message: err.Error(),
 			}
+			return nil, err
 		}
 
 		err = &datatransfers.CustomError{
@@ -79,7 +80,7 @@ func (r *userRepository) GetByID(userID string) (user *models.User, err error) {
 
 		return nil, err
 	}
-	return
+	return user, nil
 }
 
 func (r *userRepository) GetByEmail(email string) (user *models.User, err error) {
@@ -92,6 +93,7 @@ func (r *userRepository) GetByEmail(email string) (user *models.User, err error)
 				Status:  http.StatusNotFound,
 				Message: err.Error(),
 			}
+			return nil, err
 		}
 		err = &datatransfers.CustomError{
 			Code:    constants.InternalServerErrCode,
@@ -100,7 +102,7 @@ func (r *userRepository) GetByEmail(email string) (user *models.User, err error)
 		}
 		return nil, err
 	}
-	return
+	return user, nil
 }
 
 func (r *userRepository) Create(user *models.User, db *gorm.DB) (err error) {
@@ -111,8 +113,9 @@ func (r *userRepository) Create(user *models.User, db *gorm.DB) (err error) {
 			Status:  http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+		return
 	}
-	return
+	return nil
 }
 
 func (r *userRepository) Update(user *models.User, db *gorm.DB) (err error) {
@@ -135,7 +138,7 @@ func (r *userRepository) Update(user *models.User, db *gorm.DB) (err error) {
 		}
 		return
 	}
-	return
+	return nil
 }
 
 func (r *userRepository) Delete(user *models.User, db *gorm.DB) (err error) {
@@ -158,5 +161,5 @@ func (r *userRepository) Delete(user *models.User, db *gorm.DB) (err error) {
 		}
 		return
 	}
-	return
+	return nil
 }

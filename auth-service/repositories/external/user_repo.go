@@ -2,10 +2,13 @@ package repository
 
 import (
 	"auth-service/conf"
+	"auth-service/constants"
+	"auth-service/datatransfers"
 	models "auth-service/models/external"
 	"auth-service/utils"
 	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 type UserRepository interface {
@@ -25,14 +28,21 @@ func (r *userRepository) Create(user *models.User) (err error) {
 		conf.AppConfig.UserServiceURL,
 	)
 
+	fmt.Println("url creating user:", url)
+
 	payload, err := json.Marshal(user)
 	if err != nil {
+		err = &datatransfers.CustomError{
+			Code:    constants.InternalServerErrCode,
+			Status:  http.StatusInternalServerError,
+			Message: err.Error(),
+		}
 		return
 	}
 
 	_, err = utils.PostJSONRequest(url, string(payload))
 	if err != nil {
-		return
+		return err
 	}
-	return
+	return nil
 }

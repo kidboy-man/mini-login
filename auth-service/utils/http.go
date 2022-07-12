@@ -4,6 +4,7 @@ import (
 	"auth-service/datatransfers"
 	ctx "context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -30,6 +31,7 @@ func PostJSONRequest(url, payload string) (result []byte, err error) {
 	req, _ := http.NewRequestWithContext(ctx.Background(), http.MethodPost, url, strings.NewReader(payload))
 	req.Header.Add("Content-Type", "application/json")
 	response, err := client.Do(req)
+	fmt.Println("error response:", err)
 	if err != nil {
 		return
 	}
