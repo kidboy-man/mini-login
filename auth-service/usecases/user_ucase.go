@@ -111,7 +111,7 @@ func (u *authUsecase) Register(params *datatransfers.AuthRequest) (err error) {
 	}
 
 	tx.Commit()
-	return
+	return nil
 }
 
 func (u *authUsecase) Login(params *datatransfers.AuthRequest) (auth *models.Auth, err error) {
